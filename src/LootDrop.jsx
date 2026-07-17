@@ -354,6 +354,32 @@ export default function LootDrop() {
           </button>
         )}
       </div>
+      <section className="about" aria-labelledby="about-heading">
+        <h2 id="about-heading">About Loot Drops</h2>
+        <p>
+          Loot Drops aggregates every currently-active free game giveaway,
+          key drop, and beta invite from across the web, alongside a full
+          catalog of permanently free-to-play games. New listings are pulled
+          live from the GamerPower and FreeToGame APIs on every page load,
+          so the grid always reflects what's actually claimable right now.
+        </p>
+        <p>
+          Giveaways typically come from Steam, Epic Games Store, GOG,
+          PlayStation Store, Xbox, itch.io, and mobile storefronts, plus
+          services like Alienware Arena, Prime Gaming, Fanatical, and
+          Humble Bundle. Click <strong>Claim now</strong> on any card to
+          open the provider's redemption page — you'll finish the claim on
+          their own site, so the terms are whatever they set (Steam key,
+          Epic library grant, in-game currency, closed beta invite).
+        </p>
+        <p>
+          The site is free, has no accounts, and isn't affiliated with any
+          storefront. Filter by category, platform, or saved items; sort by
+          newest, value, popularity, or ending soon; bookmark cards to your
+          browser for later, or hit <strong>Random</strong> to surface
+          something you'd otherwise scroll past.
+        </p>
+      </section>
       <footer className="foot">
         <div>
           Data:{" "}

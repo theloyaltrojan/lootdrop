@@ -901,6 +901,35 @@ select:focus-visible {
   }
 }
 
+/* About */
+.about {
+  margin-top: 72px;
+  padding-top: 40px;
+  border-top: 1px solid var(--edge);
+  max-width: 720px;
+}
+.about h2 {
+  font-family: var(--f-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 16px;
+}
+.about p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin: 0 0 14px;
+}
+.about p:last-child {
+  margin-bottom: 0;
+}
+.about strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
 /* Footer */
 .foot {
   margin-top: 64px;
