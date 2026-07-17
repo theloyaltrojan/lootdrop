@@ -166,10 +166,12 @@ select:focus-visible {
   border-radius: var(--r-pill);
   transition: all 0.15s ease;
 }
-.theme-btn:hover {
-  color: var(--text);
-  border-color: var(--edge-strong);
-  background: var(--surface);
+@media (hover: hover) and (pointer: fine) {
+  .theme-btn:hover {
+    color: var(--text);
+    border-color: var(--edge-strong);
+    background: var(--surface);
+  }
 }
 .support-btn {
   display: inline-flex;
@@ -187,9 +189,11 @@ select:focus-visible {
   transition: all 0.15s ease;
   white-space: nowrap;
 }
-.support-btn:hover {
-  background: var(--accent);
-  color: var(--accent-fg);
+@media (hover: hover) and (pointer: fine) {
+  .support-btn:hover {
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
 }
 
 /* Source tabs */
@@ -216,8 +220,10 @@ select:focus-visible {
   border-radius: var(--r-pill);
   transition: color 0.15s ease, background 0.15s ease;
 }
-.source-tab:hover {
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .source-tab:hover {
+    color: var(--text);
+  }
 }
 .source-tab.active {
   background: var(--accent);
@@ -342,16 +348,20 @@ select:focus-visible {
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.filter-btn:hover {
-  border-color: var(--edge-strong);
-  background: var(--surface-2);
+@media (hover: hover) and (pointer: fine) {
+  .filter-btn:hover {
+    border-color: var(--edge-strong);
+    background: var(--surface-2);
+  }
 }
 .filter-btn.has-active {
   border-color: var(--accent);
   color: var(--accent);
 }
-.filter-btn.has-active:hover {
-  background: rgba(255, 106, 53, 0.08);
+@media (hover: hover) and (pointer: fine) {
+  .filter-btn.has-active:hover {
+    background: rgba(255, 106, 53, 0.08);
+  }
 }
 .filter-badge {
   display: inline-flex;
@@ -370,11 +380,11 @@ select:focus-visible {
 }
 @keyframes badge-pop {
   0% {
-    transform: scale(0.4);
+    transform: scale(0.85);
     opacity: 0;
   }
   60% {
-    transform: scale(1.15);
+    transform: scale(1.08);
     opacity: 1;
   }
   100% {
@@ -394,16 +404,17 @@ select:focus-visible {
   border-radius: var(--r-lg);
   box-shadow: var(--shadow);
   padding: 20px;
-  animation: filter-panel-in 0.14s ease-out;
+  transform-origin: top left;
+  animation: filter-panel-in 0.18s var(--ease-out-quart);
 }
 @keyframes filter-panel-in {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-6px) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 .filter-panel-head {
@@ -428,8 +439,10 @@ select:focus-visible {
   padding: 4px 8px;
   border-radius: var(--r-sm);
 }
-.filter-clear:hover {
-  background: rgba(255, 106, 53, 0.08);
+@media (hover: hover) and (pointer: fine) {
+  .filter-clear:hover {
+    background: rgba(255, 106, 53, 0.08);
+  }
 }
 .filter-section + .filter-section {
   margin-top: 18px;
@@ -459,9 +472,11 @@ select:focus-visible {
     background-color 0.2s var(--ease-out-quart),
     border-color 0.16s var(--ease-out-quart);
 }
-.chip.standalone:hover {
-  color: var(--text);
-  border-color: var(--edge-strong);
+@media (hover: hover) and (pointer: fine) {
+  .chip.standalone:hover {
+    color: var(--text);
+    border-color: var(--edge-strong);
+  }
 }
 .chip.standalone.active {
   background: var(--accent);
@@ -503,10 +518,12 @@ select:focus-visible {
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.random-btn:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(255, 106, 53, 0.06);
+@media (hover: hover) and (pointer: fine) {
+  .random-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 106, 53, 0.06);
+  }
 }
 .random-btn:disabled {
   opacity: 0.4;
@@ -554,12 +571,37 @@ select:focus-visible {
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  /* Keep the fade, drop the lift. Filter panel keeps its opacity. */
+  .card {
+    animation: card-in-fade 0.16s linear both;
+  }
+  @keyframes card-in-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .filter-panel {
+    animation: filter-panel-fade 0.14s linear;
+  }
+  @keyframes filter-panel-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  /* Drop pure-transform pops and the pulse — visual state is carried by
+     color/border/ribbon, which remain visible without motion. */
   .card.spotlight,
-  .card,
   .save-btn.saved,
   .filter-badge {
-    animation: none !important;
+    animation: none;
   }
+  /* No scale on press. */
   .chip:active,
   .chip.standalone:active,
   .filter-btn:active,
@@ -597,8 +639,10 @@ select:focus-visible {
   transform: scale(0.96);
   transition: transform 0.08s var(--ease-out-quart);
 }
-.chip:hover {
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    color: var(--text);
+  }
 }
 .chip.active {
   background: var(--accent);
@@ -667,7 +711,7 @@ select:focus-visible {
     border-color 0.18s var(--ease-out-quart),
     box-shadow 0.2s var(--ease-out-quart);
   position: relative;
-  animation: card-in 0.4s var(--ease-out-quart) both;
+  animation: card-in 0.24s var(--ease-out-quart) both;
 }
 @keyframes card-in {
   from {
@@ -692,16 +736,20 @@ select:focus-visible {
 .card:nth-child(11) { animation-delay: 250ms; }
 .card:nth-child(12) { animation-delay: 275ms; }
 .card:nth-child(n + 13) { animation-delay: 300ms; }
-.card:hover {
-  transform: translateY(-2px);
-  border-color: var(--edge-strong);
-  box-shadow: var(--shadow);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--edge-strong);
+    box-shadow: var(--shadow);
+  }
 }
 .card.tier-rare {
   border-color: rgba(255, 106, 53, 0.4);
 }
-.card.tier-rare:hover {
-  border-color: var(--accent);
+@media (hover: hover) and (pointer: fine) {
+  .card.tier-rare:hover {
+    border-color: var(--accent);
+  }
 }
 .card.tier-legendary {
   background: var(--accent);
@@ -709,11 +757,13 @@ select:focus-visible {
   color: var(--accent-fg);
   box-shadow: var(--glow);
 }
-.card.tier-legendary:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    var(--glow),
-    0 8px 32px rgba(255, 106, 53, 0.25);
+@media (hover: hover) and (pointer: fine) {
+  .card.tier-legendary:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      var(--glow),
+      0 8px 32px rgba(255, 106, 53, 0.25);
+  }
 }
 
 .thumb {
@@ -775,13 +825,15 @@ select:focus-visible {
     color 0.15s ease,
     transform 0.15s ease;
 }
-.save-btn:hover {
-  background: rgba(15, 14, 13, 0.85);
-  transform: scale(1.08);
+@media (hover: hover) and (pointer: fine) {
+  .save-btn:hover {
+    background: rgba(15, 14, 13, 0.85);
+    transform: scale(1.08);
+  }
 }
 .save-btn.saved {
   color: var(--accent);
-  animation: star-pop 0.32s var(--ease-out-quart);
+  animation: star-pop 0.22s var(--ease-out-quart);
 }
 @keyframes star-pop {
   0% {
@@ -924,16 +976,20 @@ select:focus-visible {
   border-radius: var(--r-md);
   transition: all 0.15s ease;
 }
-.claim:hover {
-  background: var(--accent);
-  color: var(--accent-fg);
+@media (hover: hover) and (pointer: fine) {
+  .claim:hover {
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
 }
 .card.tier-legendary .claim {
   background: var(--accent-fg);
   color: var(--accent);
 }
-.card.tier-legendary .claim:hover {
-  background: #000;
+@media (hover: hover) and (pointer: fine) {
+  .card.tier-legendary .claim:hover {
+    background: #000;
+  }
 }
 
 .card-footer {
@@ -963,10 +1019,12 @@ select:focus-visible {
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.load-more:hover {
-  background: var(--surface-2);
-  border-color: var(--edge-strong);
-  color: var(--accent);
+@media (hover: hover) and (pointer: fine) {
+  .load-more:hover {
+    background: var(--surface-2);
+    border-color: var(--edge-strong);
+    color: var(--accent);
+  }
 }
 
 /* States */
@@ -1053,8 +1111,10 @@ select:focus-visible {
   text-decoration: none;
   font-weight: 500;
 }
-.foot a:hover {
-  text-decoration: underline;
+@media (hover: hover) and (pointer: fine) {
+  .foot a:hover {
+    text-decoration: underline;
+  }
 }
 
 @media (max-width: 720px) {
