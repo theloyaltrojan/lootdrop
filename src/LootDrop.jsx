@@ -16,7 +16,6 @@ function loadSaved() {
     if (!raw) return new Set();
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return new Set();
-    // Migrate pre-namespaced numeric IDs (old app only had giveaways)
     return new Set(
       parsed.map((v) =>
         typeof v === "string" && v.includes(":") ? v : `gp:${v}`,
@@ -249,7 +248,7 @@ export default function LootDrop() {
       }
     } else {
       if (sort === "popularity") {
-        // API already returns sorted by popularity
+        // no-op: API returns sorted by popularity
       } else if (sort === "date") {
         list.sort(
           (a, b) => new Date(b.release_date) - new Date(a.release_date),
@@ -259,7 +258,6 @@ export default function LootDrop() {
       }
     }
     return list;
-    // savedKey is captured via source; source is a dep
   }, [items, category, platform, search, sort, saved, savedOnly, source]);
 
   const count =

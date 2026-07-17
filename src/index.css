@@ -491,7 +491,7 @@ select:focus-visible {
   cursor: not-allowed;
 }
 
-/* Spotlight: pulse a card after "Random" picks it */
+/* Random-pick spotlight */
 .card.spotlight {
   animation: spotlight-pulse 2.4s ease-out;
   border-color: var(--accent);
