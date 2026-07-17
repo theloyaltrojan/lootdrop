@@ -164,7 +164,11 @@ select:focus-visible {
   padding: 8px 14px;
   cursor: pointer;
   border-radius: var(--r-pill);
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.2s var(--ease-out-quart),
+    border-color 0.15s var(--ease-out-quart),
+    color 0.15s var(--ease-out-quart),
+    box-shadow 0.15s var(--ease-out-quart);
 }
 @media (hover: hover) and (pointer: fine) {
   .theme-btn:hover {
@@ -186,7 +190,11 @@ select:focus-visible {
   padding: 8px 14px;
   border-radius: var(--r-pill);
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.2s var(--ease-out-quart),
+    border-color 0.15s var(--ease-out-quart),
+    color 0.15s var(--ease-out-quart),
+    box-shadow 0.15s var(--ease-out-quart);
   white-space: nowrap;
 }
 @media (hover: hover) and (pointer: fine) {
@@ -218,7 +226,9 @@ select:focus-visible {
   padding: 8px 18px;
   cursor: pointer;
   border-radius: var(--r-pill);
-  transition: color 0.15s ease, background 0.15s ease;
+  transition:
+    color 0.15s var(--ease-out-quart),
+    background-color 0.2s var(--ease-out-quart);
 }
 @media (hover: hover) and (pointer: fine) {
   .source-tab:hover {
@@ -346,7 +356,11 @@ select:focus-visible {
   font-weight: 500;
   border-radius: var(--r-pill);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.2s var(--ease-out-quart),
+    border-color 0.15s var(--ease-out-quart),
+    color 0.15s var(--ease-out-quart),
+    box-shadow 0.15s var(--ease-out-quart);
 }
 @media (hover: hover) and (pointer: fine) {
   .filter-btn:hover {
@@ -516,7 +530,11 @@ select:focus-visible {
   font-weight: 500;
   border-radius: var(--r-pill);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.2s var(--ease-out-quart),
+    border-color 0.15s var(--ease-out-quart),
+    color 0.15s var(--ease-out-quart),
+    box-shadow 0.15s var(--ease-out-quart);
 }
 @media (hover: hover) and (pointer: fine) {
   .random-btn:hover:not(:disabled) {
@@ -662,7 +680,11 @@ select:focus-visible {
   padding: 10px 14px;
   border-radius: var(--r-pill);
   width: 240px;
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.2s var(--ease-out-quart),
+    border-color 0.15s var(--ease-out-quart),
+    color 0.15s var(--ease-out-quart),
+    box-shadow 0.15s var(--ease-out-quart);
 }
 .search::placeholder {
   color: var(--text-dim);
@@ -974,7 +996,11 @@ select:focus-visible {
   font-weight: 600;
   padding: 12px;
   border-radius: var(--r-md);
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.2s var(--ease-out-quart),
+    border-color 0.15s var(--ease-out-quart),
+    color 0.15s var(--ease-out-quart),
+    box-shadow 0.15s var(--ease-out-quart);
 }
 @media (hover: hover) and (pointer: fine) {
   .claim:hover {
@@ -1017,7 +1043,11 @@ select:focus-visible {
   font-weight: 600;
   border-radius: var(--r-pill);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition:
+    background-color 0.2s var(--ease-out-quart),
+    border-color 0.15s var(--ease-out-quart),
+    color 0.15s var(--ease-out-quart),
+    box-shadow 0.15s var(--ease-out-quart);
 }
 @media (hover: hover) and (pointer: fine) {
   .load-more:hover {
