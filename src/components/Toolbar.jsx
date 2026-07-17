@@ -45,6 +45,7 @@ export default function Toolbar({
   platform,
   onPlatform,
   platforms,
+  hidePlatform,
   search,
   onSearch,
   sort,
@@ -138,34 +139,36 @@ export default function Toolbar({
                 </div>
               </div>
 
-              <div className="filter-section">
-                <div className="filter-label">Platform</div>
-                <div className="filter-chips">
-                  <button
-                    type="button"
-                    className={
-                      "chip standalone" +
-                      (platform === "all" ? " active" : "")
-                    }
-                    onClick={() => onPlatform("all")}
-                  >
-                    All
-                  </button>
-                  {platforms.map((name) => (
+              {!hidePlatform && (
+                <div className="filter-section">
+                  <div className="filter-label">Platform</div>
+                  <div className="filter-chips">
                     <button
-                      key={name}
                       type="button"
                       className={
                         "chip standalone" +
-                        (platform === name ? " active" : "")
+                        (platform === "all" ? " active" : "")
                       }
-                      onClick={() => onPlatform(name)}
+                      onClick={() => onPlatform("all")}
                     >
-                      {name}
+                      All
                     </button>
-                  ))}
+                    {platforms.map((name) => (
+                      <button
+                        key={name}
+                        type="button"
+                        className={
+                          "chip standalone" +
+                          (platform === name ? " active" : "")
+                        }
+                        onClick={() => onPlatform(name)}
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="filter-section">
                 <label className="filter-toggle">

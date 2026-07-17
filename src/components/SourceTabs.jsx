@@ -1,6 +1,7 @@
 const TABS = [
   { value: "giveaways", label: "Live giveaways", note: "expiring soon" },
   { value: "freegames", label: "Free-to-play", note: "always free" },
+  { value: "sales", label: "Steam sales", note: "on sale now" },
 ];
 
 export default function SourceTabs({ source, onSource }) {
@@ -22,4 +23,3 @@ export default function SourceTabs({ source, onSource }) {
     </div>
   );
 }
-

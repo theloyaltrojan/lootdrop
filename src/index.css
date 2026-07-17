@@ -798,6 +798,11 @@ select:focus-visible {
   color: var(--accent);
   font-weight: 600;
 }
+.expiry.sale-strike {
+  text-decoration: line-through;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
 .card.tier-legendary .expiry {
   color: rgba(26, 14, 8, 0.75);
 }

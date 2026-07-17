@@ -5,6 +5,7 @@ import SourceTabs from "./components/SourceTabs";
 import Toolbar from "./components/Toolbar";
 import GiveawayCard from "./components/GiveawayCard";
 import FreeGameCard from "./components/FreeGameCard";
+import SteamDealCard from "./components/SteamDealCard";
 import Skeleton from "./components/Skeleton";
 import { parseWorth, daysUntil } from "./utils";
 
@@ -26,12 +27,19 @@ function loadSaved() {
   }
 }
 
+const SOURCE_PREFIX = {
+  giveaways: "gp",
+  freegames: "ftg",
+  sales: "sd",
+};
+
 export default function LootDrop() {
   const [source, setSource] = useState("giveaways");
 
   const [giveaways, setGiveaways] = useState(null);
   const [worthStats, setWorthStats] = useState(null);
   const [freeGames, setFreeGames] = useState(null);
+  const [steamDeals, setSteamDeals] = useState(null);
   const [error, setError] = useState(null);
   const [lastUpdate, setLastUpdate] = useState("");
 
@@ -49,6 +57,8 @@ export default function LootDrop() {
     startTransition(() => setSource(next));
   };
 
+  const savedKey = (id) => `${SOURCE_PREFIX[source]}:${id}`;
+
   const handleRandom = () => {
     if (!filtered.length) return;
     const idx = Math.floor(Math.random() * filtered.length);
@@ -56,7 +66,8 @@ export default function LootDrop() {
     if (idx >= visibleCount) {
       setVisibleCount(Math.ceil((idx + 1) / 60) * 60);
     }
-    setSpotlight({ id: savedKey(pick.id), key: Date.now() });
+    const pickId = source === "sales" ? pick.dealID : pick.id;
+    setSpotlight({ id: savedKey(pickId), key: Date.now() });
   };
 
   useEffect(() => {
@@ -77,7 +88,6 @@ export default function LootDrop() {
     }
   }, [saved]);
 
-  const savedKey = (id) => `${source === "giveaways" ? "gp" : "ftg"}:${id}`;
   const toggleSaved = (id) => {
     const key = savedKey(id);
     setSaved((prev) => {
@@ -91,7 +101,9 @@ export default function LootDrop() {
   useEffect(() => {
     setCategory("all");
     setPlatform("all");
-    setSort(source === "giveaways" ? "date" : "popularity");
+    if (source === "giveaways") setSort("date");
+    else if (source === "freegames") setSort("popularity");
+    else setSort("savings");
     setSavedOnly(false);
     setError(null);
     setVisibleCount(60);
@@ -132,14 +144,33 @@ export default function LootDrop() {
         if (!cancelled) setError(e.message);
       }
     }
+    async function loadSales() {
+      try {
+        const res = await fetch(
+          "https://www.cheapshark.com/api/1.0/deals?storeID=1&pageSize=60&sortBy=Savings",
+        );
+        const list = await res.json();
+        if (cancelled) return;
+        setSteamDeals(Array.isArray(list) ? list : []);
+        setLastUpdate(stamp());
+      } catch (e) {
+        if (!cancelled) setError(e.message);
+      }
+    }
     if (source === "giveaways" && giveaways == null) loadGiveaways();
     if (source === "freegames" && freeGames == null) loadFreeGames();
+    if (source === "sales" && steamDeals == null) loadSales();
     return () => {
       cancelled = true;
     };
-  }, [source, giveaways, freeGames]);
+  }, [source, giveaways, freeGames, steamDeals]);
 
-  const items = source === "giveaways" ? giveaways : freeGames;
+  const items =
+    source === "giveaways"
+      ? giveaways
+      : source === "freegames"
+        ? freeGames
+        : steamDeals;
 
   const categoryOptions = useMemo(() => {
     if (source === "giveaways") {
@@ -148,6 +179,15 @@ export default function LootDrop() {
         { value: "game", label: "Games" },
         { value: "loot", label: "Loot" },
         { value: "beta", label: "Playtests" },
+      ];
+    }
+    if (source === "sales") {
+      return [
+        { value: "all", label: "All" },
+        { value: "25", label: "25%+ off" },
+        { value: "50", label: "50%+ off" },
+        { value: "75", label: "75%+ off" },
+        { value: "90", label: "90%+ off" },
       ];
     }
     if (!freeGames) return [{ value: "all", label: "All" }];
@@ -164,7 +204,7 @@ export default function LootDrop() {
   }, [source, freeGames]);
 
   const platforms = useMemo(() => {
-    if (!items) return [];
+    if (!items || source === "sales") return [];
     const counts = {};
     const getPlatforms =
       source === "giveaways"
@@ -192,6 +232,14 @@ export default function LootDrop() {
         { value: "expiry", label: "Ending soon" },
       ];
     }
+    if (source === "sales") {
+      return [
+        { value: "savings", label: "Biggest saving" },
+        { value: "price", label: "Cheapest" },
+        { value: "rating", label: "Highest rated" },
+        { value: "deal", label: "Best deal score" },
+      ];
+    }
     return [
       { value: "popularity", label: "Popular" },
       { value: "date", label: "Newest" },
@@ -204,7 +252,8 @@ export default function LootDrop() {
     let list = items;
 
     if (savedOnly) {
-      list = list.filter((g) => saved.has(savedKey(g.id)));
+      const idFor = (g) => (source === "sales" ? g.dealID : g.id);
+      list = list.filter((g) => saved.has(savedKey(idFor(g))));
     }
 
     if (category !== "all") {
@@ -212,12 +261,17 @@ export default function LootDrop() {
         list = list.filter((g) =>
           (g.type || "").toLowerCase().includes(category),
         );
+      } else if (source === "sales") {
+        const threshold = parseInt(category, 10);
+        list = list.filter(
+          (g) => (parseFloat(g.savings) || 0) >= threshold,
+        );
       } else {
         list = list.filter((g) => (g.genre || "") === category);
       }
     }
 
-    if (platform !== "all") {
+    if (platform !== "all" && source !== "sales") {
       if (source === "giveaways") {
         list = list.filter((g) => (g.platforms || "").includes(platform));
       } else {
@@ -246,10 +300,29 @@ export default function LootDrop() {
             (daysUntil(a.end_date) ?? 9999) - (daysUntil(b.end_date) ?? 9999),
         );
       }
+    } else if (source === "sales") {
+      if (sort === "savings") {
+        list.sort(
+          (a, b) => parseFloat(b.savings) - parseFloat(a.savings),
+        );
+      } else if (sort === "price") {
+        list.sort(
+          (a, b) => parseFloat(a.salePrice) - parseFloat(b.salePrice),
+        );
+      } else if (sort === "rating") {
+        list.sort(
+          (a, b) =>
+            (parseInt(b.steamRatingPercent, 10) || 0) -
+            (parseInt(a.steamRatingPercent, 10) || 0),
+        );
+      } else if (sort === "deal") {
+        list.sort(
+          (a, b) =>
+            (parseFloat(b.dealRating) || 0) - (parseFloat(a.dealRating) || 0),
+        );
+      }
     } else {
-      if (sort === "popularity") {
-        // no-op: API returns sorted by popularity
-      } else if (sort === "date") {
+      if (sort === "date") {
         list.sort(
           (a, b) => new Date(b.release_date) - new Date(a.release_date),
         );
@@ -263,11 +336,21 @@ export default function LootDrop() {
   const count =
     source === "giveaways"
       ? (worthStats?.active_giveaways_number ?? giveaways?.length ?? null)
-      : (freeGames?.length ?? null);
+      : source === "freegames"
+        ? (freeGames?.length ?? null)
+        : (steamDeals?.length ?? null);
   const worth = source === "giveaways" ? worthStats?.worth_estimation_usd : null;
+  const avgSavings = useMemo(() => {
+    if (source !== "sales" || !steamDeals?.length) return null;
+    const total = steamDeals.reduce(
+      (acc, d) => acc + (parseFloat(d.savings) || 0),
+      0,
+    );
+    return total / steamDeals.length;
+  }, [source, steamDeals]);
 
   const savedCountForSource = useMemo(() => {
-    const prefix = source === "giveaways" ? "gp:" : "ftg:";
+    const prefix = SOURCE_PREFIX[source] + ":";
     let n = 0;
     saved.forEach((k) => {
       if (k.startsWith(prefix)) n++;
@@ -278,7 +361,12 @@ export default function LootDrop() {
   const totalCount = items?.length ?? 0;
   const showResultsCount =
     items != null && !error && !(savedOnly && savedCountForSource === 0);
-  const labelWord = source === "giveaways" ? "drops" : "games";
+  const labelWord =
+    source === "giveaways"
+      ? "drops"
+      : source === "freegames"
+        ? "games"
+        : "deals";
   const resultsLabel =
     filtered.length === totalCount
       ? `${totalCount.toLocaleString()} ${labelWord}`
@@ -288,7 +376,7 @@ export default function LootDrop() {
     <div className="page">
       <Header />
       <SourceTabs source={source} onSource={handleSourceChange} />
-      <Hero source={source} count={count} worth={worth} />
+      <Hero source={source} count={count} worth={worth} avgSavings={avgSavings} />
       <Toolbar
         categoryOptions={categoryOptions}
         category={category}
@@ -296,6 +384,7 @@ export default function LootDrop() {
         platform={platform}
         onPlatform={setPlatform}
         platforms={platforms}
+        hidePlatform={source === "sales"}
         search={search}
         onSearch={setSearch}
         sort={sort}
@@ -330,12 +419,21 @@ export default function LootDrop() {
               onToggleSave={toggleSaved}
             />
           ))
-        ) : (
+        ) : source === "freegames" ? (
           filtered.slice(0, visibleCount).map((g) => (
             <FreeGameCard
               key={g.id}
               game={g}
               isSaved={saved.has(savedKey(g.id))}
+              onToggleSave={toggleSaved}
+            />
+          ))
+        ) : (
+          filtered.slice(0, visibleCount).map((d) => (
+            <SteamDealCard
+              key={d.dealID}
+              deal={d}
+              isSaved={saved.has(savedKey(d.dealID))}
               onToggleSave={toggleSaved}
             />
           ))
@@ -359,9 +457,10 @@ export default function LootDrop() {
         <p>
           Loot Drops aggregates every currently-active free game giveaway,
           key drop, and beta invite from across the web, alongside a full
-          catalog of permanently free-to-play games. New listings are pulled
-          live from the GamerPower and FreeToGame APIs on every page load,
-          so the grid always reflects what's actually claimable right now.
+          catalog of permanently free-to-play games and live Steam discounts.
+          New listings are pulled from the GamerPower, FreeToGame, and
+          CheapShark APIs on every page load, so the grid always reflects
+          what's actually available right now.
         </p>
         <p>
           Giveaways typically come from Steam, Epic Games Store, GOG,
@@ -389,14 +488,22 @@ export default function LootDrop() {
             rel="noopener noreferrer"
           >
             gamerpower.com
-          </a>{" "}
-          +{" "}
+          </a>
+          {" + "}
           <a
             href="https://www.freetogame.com/api-doc"
             target="_blank"
             rel="noopener noreferrer"
           >
             freetogame.com
+          </a>
+          {" + "}
+          <a
+            href="https://apidocs.cheapshark.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            cheapshark.com
           </a>{" "}
           · not affiliated with any storefront
         </div>
@@ -415,4 +522,3 @@ function stamp() {
     })
   );
 }
-

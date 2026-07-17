@@ -1,7 +1,5 @@
-export default function Hero({ source, count, worth }) {
+export default function Hero({ source, count, worth, avgSavings }) {
   const countText = count == null ? "—" : count.toLocaleString();
-  const worthText =
-    worth == null ? "—" : "$" + Math.round(worth).toLocaleString();
 
   if (source === "freegames") {
     return (
@@ -28,6 +26,37 @@ export default function Hero({ source, count, worth }) {
     );
   }
 
+  if (source === "sales") {
+    const savingsText =
+      avgSavings == null ? "—" : Math.round(avgSavings) + "%";
+    return (
+      <section className="hero">
+        <h1 className="hero-title">
+          Steam sales<span className="accent">.</span>
+          <br />
+          right now<span className="accent">.</span>
+        </h1>
+        <div className="hero-stats">
+          <span>
+            <strong className="hero-num">{countText}</strong> active deals
+          </span>
+          <span className="hero-sep">·</span>
+          <span>
+            <strong className="hero-num accent">{savingsText}</strong> average
+            off
+          </span>
+        </div>
+        <p className="hero-desc">
+          Every game currently discounted on Steam, sorted by the biggest cut.
+          Hit <strong>Get on Steam</strong> to jump to the store page and pick
+          it up before the price resets. Data via the CheapShark API.
+        </p>
+      </section>
+    );
+  }
+
+  const worthText =
+    worth == null ? "—" : "$" + Math.round(worth).toLocaleString();
   return (
     <section className="hero">
       <h1 className="hero-title">
@@ -53,4 +82,3 @@ export default function Hero({ source, count, worth }) {
     </section>
   );
 }
-
