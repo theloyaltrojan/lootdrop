@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CoffeeIcon } from "./icons";
 
 export default function Header() {
   const [theme, setTheme] = useState(() => {
@@ -42,7 +43,8 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          ☕ Support on Ko-fi
+          <CoffeeIcon />
+          Support on Ko-fi
         </a>
         <button className="theme-btn" type="button" onClick={toggleTheme}>
           Theme

@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { StarIcon } from "./icons";
 
 function SteamDealCard({ deal, isSaved, onToggleSave }) {
   const d = deal;
@@ -32,7 +33,7 @@ function SteamDealCard({ deal, isSaved, onToggleSave }) {
           aria-pressed={isSaved}
           title={isSaved ? "Saved" : "Save for later"}
         >
-          {isSaved ? "★" : "☆"}
+          <StarIcon filled={isSaved} />
         </button>
       </div>
       <div className="card-body">

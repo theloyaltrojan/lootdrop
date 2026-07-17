@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { StarIcon } from "./icons";
 
 function FreeGameCard({ game, isSaved, onToggleSave }) {
   const g = game;
@@ -23,7 +24,7 @@ function FreeGameCard({ game, isSaved, onToggleSave }) {
           aria-pressed={isSaved}
           title={isSaved ? "Saved" : "Save for later"}
         >
-          {isSaved ? "★" : "☆"}
+          <StarIcon filled={isSaved} />
         </button>
       </div>
       <div className="card-body">

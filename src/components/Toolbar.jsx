@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { StarIcon } from "./icons";
 
 const FilterIcon = () => (
   <svg
@@ -179,8 +180,8 @@ export default function Toolbar({
                     checked={savedOnly}
                     onChange={(e) => onSavedOnly(e.target.checked)}
                   />
-                  <span>
-                    ★ Show only saved
+                  <span className="filter-toggle-text">
+                    <StarIcon filled size={13} /> Show only saved
                     {savedCount > 0 && (
                       <span className="filter-toggle-hint">
                         {" "}

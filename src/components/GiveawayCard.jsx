@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { parseWorth, tier, formatExpiry } from "../utils";
+import { StarIcon } from "./icons";
 
 function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
   const g = giveaway;
@@ -41,7 +42,7 @@ function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
           aria-pressed={isSaved}
           title={isSaved ? "Saved" : "Save for later"}
         >
-          {isSaved ? "★" : "☆"}
+          <StarIcon filled={isSaved} />
         </button>
       </div>
       <div className="card-body">

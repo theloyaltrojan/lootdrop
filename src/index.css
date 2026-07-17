@@ -21,7 +21,7 @@
 
   --r-sm: 8px;
   --r-md: 12px;
-  --r-lg: 16px;
+  --r-lg: 14px;
   --r-pill: 999px;
 
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -512,6 +512,15 @@ select:focus-visible {
   accent-color: var(--accent);
   cursor: pointer;
 }
+.filter-toggle-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.filter-toggle-text svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
 .filter-toggle-hint {
   color: var(--text-muted);
   font-size: 13px;
@@ -559,7 +568,7 @@ select:focus-visible {
   animation: spotlight-pulse 1.6s ease-out;
 }
 .card.spotlight::before {
-  content: "★ RANDOM PICK";
+  content: "RANDOM PICK";
   position: absolute;
   top: 0;
   left: 0;
@@ -877,7 +886,7 @@ select:focus-visible {
 }
 
 .card-body {
-  padding: 18px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -1096,8 +1105,8 @@ select:focus-visible {
 
 /* About */
 .about {
-  margin-top: 72px;
-  padding-top: 40px;
+  margin-top: 100px;
+  padding-top: 48px;
   border-top: 1px solid var(--edge);
   max-width: 720px;
 }
