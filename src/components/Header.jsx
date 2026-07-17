@@ -32,14 +32,18 @@ export default function Header() {
   return (
     <header className="top">
       <div className="brand">
-        <span className="brand-mark">LOOTDROP</span>
-        <span className="brand-sub">// GamerPower feed</span>
+        <span className="brand-mark">lootdrop</span>
+        <span className="brand-sub">gamerpower feed</span>
       </div>
       <div className="top-right">
-        <span className="live">
-          <span className="dot" />
-          Live
-        </span>
+        <a
+          className="support-btn"
+          href="https://ko-fi.com/hedgert"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ☕ Support on Ko-fi
+        </a>
         <button className="theme-btn" type="button" onClick={toggleTheme}>
           Theme
         </button>

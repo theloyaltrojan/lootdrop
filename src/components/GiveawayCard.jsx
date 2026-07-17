@@ -32,9 +32,6 @@ export default function GiveawayCard({ giveaway }) {
         <span className={`type-tag ${typeLabel.toLowerCase()}`}>
           {typeLabel}
         </span>
-        {t === "legendary" && (
-          <span className="tier-ribbon">Legendary</span>
-        )}
       </div>
       <div className="card-body">
         <h3 className="card-title">{g.title}</h3>
