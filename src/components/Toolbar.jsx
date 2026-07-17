@@ -1,20 +1,7 @@
-const TYPE_OPTIONS = [
-  { value: "all", label: "All" },
-  { value: "game", label: "Games" },
-  { value: "loot", label: "Loot" },
-  { value: "beta", label: "Playtests" },
-];
-
-const SORT_OPTIONS = [
-  { value: "date", label: "Newest" },
-  { value: "value", label: "By value" },
-  { value: "popularity", label: "Popular" },
-  { value: "expiry", label: "Ending soon" },
-];
-
 export default function Toolbar({
-  type,
-  onType,
+  categoryOptions,
+  category,
+  onCategory,
   platform,
   onPlatform,
   platforms,
@@ -22,6 +9,7 @@ export default function Toolbar({
   onSearch,
   sort,
   onSort,
+  sortOptions,
   savedOnly,
   onSavedOnly,
   savedCount,
@@ -30,12 +18,12 @@ export default function Toolbar({
     <div className="toolbar">
       <div className="filter-row">
         <div className="chip-group">
-          {TYPE_OPTIONS.map((o) => (
+          {categoryOptions.map((o) => (
             <button
               key={o.value}
               type="button"
-              className={"chip" + (type === o.value ? " active" : "")}
-              onClick={() => onType(o.value)}
+              className={"chip" + (category === o.value ? " active" : "")}
+              onClick={() => onCategory(o.value)}
             >
               {o.label}
             </button>
@@ -76,7 +64,7 @@ export default function Toolbar({
           type="text"
           className="search"
           placeholder="Search titles…"
-          aria-label="Search giveaways"
+          aria-label="Search titles"
           value={search}
           onChange={(e) => onSearch(e.target.value)}
         />
@@ -86,7 +74,7 @@ export default function Toolbar({
           value={sort}
           onChange={(e) => onSort(e.target.value)}
         >
-          {SORT_OPTIONS.map((o) => (
+          {sortOptions.map((o) => (
             <option key={o.value} value={o.value}>
               {o.label}
             </option>
