@@ -76,8 +76,9 @@ export default function LootDrop() {
     if (!el) return;
     el.scrollIntoView({ behavior: "smooth", block: "center" });
     el.classList.add("spotlight");
-    const t = setTimeout(() => el.classList.remove("spotlight"), 2600);
-    return () => clearTimeout(t);
+    return () => {
+      el.classList.remove("spotlight");
+    };
   }, [spotlight]);
 
   useEffect(() => {
@@ -107,10 +108,12 @@ export default function LootDrop() {
     setSavedOnly(false);
     setError(null);
     setVisibleCount(60);
+    setSpotlight(null);
   }, [source]);
 
   useEffect(() => {
     setVisibleCount(60);
+    setSpotlight(null);
   }, [category, platform, search, sort, savedOnly]);
 
   useEffect(() => {
