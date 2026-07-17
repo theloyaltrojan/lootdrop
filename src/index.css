@@ -319,6 +319,29 @@ select:focus-visible {
   border-radius: var(--r-pill);
   flex-wrap: wrap;
 }
+.chip-group.scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  min-width: 0;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--edge-strong) transparent;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+.chip-group.scroll::-webkit-scrollbar {
+  height: 3px;
+}
+.chip-group.scroll::-webkit-scrollbar-thumb {
+  background: var(--edge-strong);
+  border-radius: 2px;
+}
+.chip-group.scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chip-group.scroll .chip {
+  scroll-snap-align: start;
+}
 .chip {
   background: transparent;
   border: 0;
@@ -640,6 +663,27 @@ select:focus-visible {
 }
 .card.tier-legendary .card-footer {
   color: rgba(26, 14, 8, 0.55);
+}
+
+.load-more {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: 12px;
+  padding: 14px 32px;
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.load-more:hover {
+  background: var(--surface-2);
+  border-color: var(--edge-strong);
+  color: var(--accent);
 }
 
 /* States */

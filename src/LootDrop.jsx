@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, startTransition } from "react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import SourceTabs from "./components/SourceTabs";
@@ -43,6 +43,11 @@ export default function LootDrop() {
 
   const [saved, setSaved] = useState(loadSaved);
   const [savedOnly, setSavedOnly] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(60);
+
+  const handleSourceChange = (next) => {
+    startTransition(() => setSource(next));
+  };
 
   useEffect(() => {
     try {
@@ -69,7 +74,12 @@ export default function LootDrop() {
     setSort(source === "giveaways" ? "date" : "popularity");
     setSavedOnly(false);
     setError(null);
+    setVisibleCount(60);
   }, [source]);
+
+  useEffect(() => {
+    setVisibleCount(60);
+  }, [category, platform, search, sort, savedOnly]);
 
   useEffect(() => {
     let cancelled = false;
@@ -128,7 +138,7 @@ export default function LootDrop() {
     });
     const top = Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 6)
+      .slice(0, 15)
       .map(([name]) => ({ value: name, label: name }));
     return [{ value: "all", label: "All" }, ...top];
   }, [source, freeGames]);
@@ -149,7 +159,7 @@ export default function LootDrop() {
     });
     return Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, source === "giveaways" ? 8 : 4)
+      .slice(0, source === "giveaways" ? 15 : 8)
       .map(([name]) => name);
   }, [items, source]);
 
@@ -258,7 +268,7 @@ export default function LootDrop() {
   return (
     <div className="page">
       <Header />
-      <SourceTabs source={source} onSource={setSource} />
+      <SourceTabs source={source} onSource={handleSourceChange} />
       <Hero source={source} count={count} worth={worth} />
       <Toolbar
         categoryOptions={categoryOptions}
@@ -291,7 +301,7 @@ export default function LootDrop() {
               : "No results match your filters"}
           </div>
         ) : source === "giveaways" ? (
-          filtered.map((g) => (
+          filtered.slice(0, visibleCount).map((g) => (
             <GiveawayCard
               key={g.id}
               giveaway={g}
@@ -300,7 +310,7 @@ export default function LootDrop() {
             />
           ))
         ) : (
-          filtered.map((g) => (
+          filtered.slice(0, visibleCount).map((g) => (
             <FreeGameCard
               key={g.id}
               game={g}
@@ -308,6 +318,19 @@ export default function LootDrop() {
               onToggleSave={toggleSaved}
             />
           ))
+        )}
+        {filtered.length > visibleCount && (
+          <button
+            className="load-more"
+            type="button"
+            onClick={() =>
+              setVisibleCount((v) =>
+                Math.min(v + 60, filtered.length),
+              )
+            }
+          >
+            Load {Math.min(60, filtered.length - visibleCount)} more
+          </button>
         )}
       </div>
       <footer className="foot">

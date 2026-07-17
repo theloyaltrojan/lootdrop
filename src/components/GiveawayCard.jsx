@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { parseWorth, tier, formatExpiry } from "../utils";
 
-export default function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
+function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
   const g = giveaway;
   const worth = parseWorth(g.worth);
   const t = tier(worth);
@@ -74,3 +75,5 @@ export default function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
     </article>
   );
 }
+
+export default memo(GiveawayCard);

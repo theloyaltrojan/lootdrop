@@ -1,4 +1,6 @@
-export default function FreeGameCard({ game, isSaved, onToggleSave }) {
+import { memo } from "react";
+
+function FreeGameCard({ game, isSaved, onToggleSave }) {
   const g = game;
   const platform = (g.platform || "").replace(/\s*\(.*?\)\s*/g, "").trim();
   const year = g.release_date ? new Date(g.release_date).getFullYear() : null;
@@ -49,3 +51,5 @@ export default function FreeGameCard({ game, isSaved, onToggleSave }) {
     </article>
   );
 }
+
+export default memo(FreeGameCard);

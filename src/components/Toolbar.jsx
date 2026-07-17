@@ -17,7 +17,7 @@ export default function Toolbar({
   return (
     <div className="toolbar">
       <div className="filter-row">
-        <div className="chip-group">
+        <div className="chip-group scroll">
           {categoryOptions.map((o) => (
             <button
               key={o.value}
@@ -29,7 +29,7 @@ export default function Toolbar({
             </button>
           ))}
         </div>
-        <div className="chip-group">
+        <div className="chip-group scroll">
           <button
             type="button"
             className={"chip" + (platform === "all" ? " active" : "")}
