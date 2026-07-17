@@ -44,10 +44,31 @@ export default function LootDrop() {
   const [saved, setSaved] = useState(loadSaved);
   const [savedOnly, setSavedOnly] = useState(false);
   const [visibleCount, setVisibleCount] = useState(60);
+  const [spotlight, setSpotlight] = useState(null);
 
   const handleSourceChange = (next) => {
     startTransition(() => setSource(next));
   };
+
+  const handleRandom = () => {
+    if (!filtered.length) return;
+    const idx = Math.floor(Math.random() * filtered.length);
+    const pick = filtered[idx];
+    if (idx >= visibleCount) {
+      setVisibleCount(Math.ceil((idx + 1) / 60) * 60);
+    }
+    setSpotlight({ id: savedKey(pick.id), key: Date.now() });
+  };
+
+  useEffect(() => {
+    if (!spotlight) return;
+    const el = document.getElementById(`card-${spotlight.id}`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("spotlight");
+    const t = setTimeout(() => el.classList.remove("spotlight"), 2600);
+    return () => clearTimeout(t);
+  }, [spotlight]);
 
   useEffect(() => {
     try {
@@ -285,6 +306,8 @@ export default function LootDrop() {
         savedOnly={savedOnly}
         onSavedOnly={setSavedOnly}
         savedCount={savedCountForSource}
+        onRandom={handleRandom}
+        randomDisabled={!filtered.length}
       />
       {showResultsCount && (
         <div className="results-count">{resultsLabel}</div>

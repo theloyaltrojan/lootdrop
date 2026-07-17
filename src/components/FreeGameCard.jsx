@@ -6,7 +6,7 @@ function FreeGameCard({ game, isSaved, onToggleSave }) {
   const year = g.release_date ? new Date(g.release_date).getFullYear() : null;
 
   return (
-    <article className="card tier-common">
+    <article className="card tier-common" id={`card-ftg:${g.id}`}>
       <div className="thumb">
         <img
           src={g.thumbnail}

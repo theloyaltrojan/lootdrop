@@ -22,7 +22,7 @@ function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
   const users = g.users ? g.users.toLocaleString() + " claimed" : "";
 
   return (
-    <article className={`card tier-${t}`}>
+    <article className={`card tier-${t}`} id={`card-gp:${g.id}`}>
       <div className="thumb">
         <img
           src={g.thumbnail}

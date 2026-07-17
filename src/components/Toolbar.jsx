@@ -18,6 +18,26 @@ const FilterIcon = () => (
   </svg>
 );
 
+const ShuffleIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <polyline points="16 3 21 3 21 8" />
+    <line x1="4" y1="20" x2="21" y2="3" />
+    <polyline points="21 16 21 21 16 21" />
+    <line x1="15" y1="15" x2="21" y2="21" />
+    <line x1="4" y1="4" x2="9" y2="9" />
+  </svg>
+);
+
 export default function Toolbar({
   categoryOptions,
   category,
@@ -33,6 +53,8 @@ export default function Toolbar({
   savedOnly,
   onSavedOnly,
   savedCount,
+  onRandom,
+  randomDisabled,
 }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
@@ -166,6 +188,16 @@ export default function Toolbar({
             </div>
           )}
         </div>
+        <button
+          type="button"
+          className="random-btn"
+          onClick={onRandom}
+          disabled={randomDisabled}
+          title="Jump to a random pick"
+        >
+          <ShuffleIcon />
+          <span>Random</span>
+        </button>
       </div>
       <div className="tool-right">
         <input
