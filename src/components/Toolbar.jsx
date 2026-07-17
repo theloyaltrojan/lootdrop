@@ -101,7 +101,9 @@ export default function Toolbar({
             <FilterIcon />
             <span>Filters</span>
             {activeCount > 0 && (
-              <span className="filter-badge">{activeCount}</span>
+              <span key={activeCount} className="filter-badge">
+                {activeCount}
+              </span>
             )}
           </button>
 
