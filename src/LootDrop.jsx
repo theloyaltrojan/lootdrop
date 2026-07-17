@@ -6,6 +6,18 @@ import GiveawayCard from "./components/GiveawayCard";
 import Skeleton from "./components/Skeleton";
 import { parseWorth, daysUntil } from "./utils";
 
+const SAVED_KEY = "lootdrop-saved";
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(SAVED_KEY);
+    if (!raw) return new Set();
+    return new Set(JSON.parse(raw));
+  } catch {
+    return new Set();
+  }
+}
+
 export default function LootDrop() {
   const [giveaways, setGiveaways] = useState(null);
   const [worthStats, setWorthStats] = useState(null);
@@ -16,6 +28,26 @@ export default function LootDrop() {
   const [platform, setPlatform] = useState("all");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("date");
+
+  const [saved, setSaved] = useState(loadSaved);
+  const [savedOnly, setSavedOnly] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(SAVED_KEY, JSON.stringify([...saved]));
+    } catch {
+      /* ignore */
+    }
+  }, [saved]);
+
+  const toggleSaved = (id) => {
+    setSaved((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -68,6 +100,7 @@ export default function LootDrop() {
   const filtered = useMemo(() => {
     if (!giveaways) return [];
     let items = giveaways;
+    if (savedOnly) items = items.filter((g) => saved.has(g.id));
     if (type !== "all") {
       items = items.filter((g) =>
         (g.type || "").toLowerCase().includes(type),
@@ -96,10 +129,18 @@ export default function LootDrop() {
       );
     }
     return items;
-  }, [giveaways, type, platform, search, sort]);
+  }, [giveaways, type, platform, search, sort, saved, savedOnly]);
 
   const count = worthStats?.active_giveaways_number ?? giveaways?.length ?? null;
   const worth = worthStats?.worth_estimation_usd ?? null;
+
+  const totalCount = giveaways?.length ?? 0;
+  const showResultsCount =
+    giveaways != null && !error && !(savedOnly && saved.size === 0);
+  const resultsLabel =
+    filtered.length === totalCount
+      ? `${totalCount.toLocaleString()} drops`
+      : `${filtered.length.toLocaleString()} of ${totalCount.toLocaleString()} drops`;
 
   return (
     <div className="page">
@@ -115,16 +156,33 @@ export default function LootDrop() {
         onSearch={setSearch}
         sort={sort}
         onSort={setSort}
+        savedOnly={savedOnly}
+        onSavedOnly={setSavedOnly}
+        savedCount={saved.size}
       />
+      {showResultsCount && (
+        <div className="results-count">{resultsLabel}</div>
+      )}
       <div className="grid">
         {error ? (
           <div className="state">Failed to load — {error}</div>
         ) : giveaways == null ? (
           <Skeleton />
         ) : filtered.length === 0 ? (
-          <div className="state">No drops match your filters</div>
+          <div className="state">
+            {savedOnly && saved.size === 0
+              ? "No saved drops yet. Tap the star on any card to save it."
+              : "No drops match your filters"}
+          </div>
         ) : (
-          filtered.map((g) => <GiveawayCard key={g.id} giveaway={g} />)
+          filtered.map((g) => (
+            <GiveawayCard
+              key={g.id}
+              giveaway={g}
+              isSaved={saved.has(g.id)}
+              onToggleSave={toggleSaved}
+            />
+          ))
         )}
       </div>
       <footer className="foot">

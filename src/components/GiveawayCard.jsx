@@ -1,6 +1,6 @@
 import { parseWorth, tier, formatExpiry } from "../utils";
 
-export default function GiveawayCard({ giveaway }) {
+export default function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
   const g = giveaway;
   const worth = parseWorth(g.worth);
   const t = tier(worth);
@@ -32,6 +32,16 @@ export default function GiveawayCard({ giveaway }) {
         <span className={`type-tag ${typeLabel.toLowerCase()}`}>
           {typeLabel}
         </span>
+        <button
+          type="button"
+          className={"save-btn" + (isSaved ? " saved" : "")}
+          onClick={() => onToggleSave(g.id)}
+          aria-label={isSaved ? "Remove from saved" : "Save for later"}
+          aria-pressed={isSaved}
+          title={isSaved ? "Saved" : "Save for later"}
+        >
+          {isSaved ? "★" : "☆"}
+        </button>
       </div>
       <div className="card-body">
         <h3 className="card-title">{g.title}</h3>

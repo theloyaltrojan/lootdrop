@@ -22,6 +22,9 @@ export default function Toolbar({
   onSearch,
   sort,
   onSort,
+  savedOnly,
+  onSavedOnly,
+  savedCount,
 }) {
   return (
     <div className="toolbar">
@@ -56,6 +59,16 @@ export default function Toolbar({
               {name}
             </button>
           ))}
+        </div>
+        <div className="chip-group">
+          <button
+            type="button"
+            className={"chip" + (savedOnly ? " active" : "")}
+            onClick={() => onSavedOnly(!savedOnly)}
+            aria-pressed={savedOnly}
+          >
+            ★ Saved{savedCount > 0 ? ` (${savedCount})` : ""}
+          </button>
         </div>
       </div>
       <div className="tool-right">
