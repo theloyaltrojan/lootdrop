@@ -137,7 +137,14 @@ export default function LootDrop() {
           >
             gamerpower.com/api
           </a>{" "}
-          · not affiliated with any storefront
+          · not affiliated with any storefront ·{" "}
+          <a
+            href="https://ko-fi.com/hedgert"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Support on Ko-fi ☕
+          </a>
         </div>
         <div>{lastUpdate || "—"}</div>
       </footer>
