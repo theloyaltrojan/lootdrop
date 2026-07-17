@@ -25,3 +25,4 @@ export function formatExpiry(dateStr) {
   if (days <= 14) return { text: `${days} days left`, urgent: false };
   return { text: `${days}d left`, urgent: false };
 }
+

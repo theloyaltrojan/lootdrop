@@ -77,3 +77,4 @@ function GiveawayCard({ giveaway, isSaved, onToggleSave }) {
 }
 
 export default memo(GiveawayCard);
+

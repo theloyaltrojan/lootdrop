@@ -53,3 +53,4 @@ function FreeGameCard({ game, isSaved, onToggleSave }) {
 }
 
 export default memo(FreeGameCard);
+

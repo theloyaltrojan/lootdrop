@@ -11,3 +11,4 @@ export default function Skeleton({ count = 8 }) {
     </div>
   ));
 }
+
